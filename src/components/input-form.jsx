@@ -3,11 +3,14 @@ import Details from "./details";
 import axios from "axios";
 
 const InputForm = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     fName: "",
     lName: "",
     email: "",
-  });
+  }
+
+  const [formData, setFormData] = useState(initialFormData);
+
 
   const { fName, lName, email } = formData;
 
@@ -15,7 +18,6 @@ const InputForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const [submitted, setSubmitted] = useState()
-  const [addNew, setAddNew] = useState()
 
   // const [items, setItems] = useState([]);
   const handleSubmit = async (e) => {
@@ -25,8 +27,8 @@ const InputForm = () => {
     // setItems([...items, info]);
 
     const response = await axios.post(
-      // "/api/subscribe",
-      "https://cors-anywhere.herokuapp.com/https://us5.api.mailchimp.com/3.0/lists/00e11d7af1",
+      "/api/subscribe",
+      // "https://cors-anywhere.herokuapp.com/https://us5.api.mailchimp.com/3.0/lists/00e11d7af1",
       {
         members: [
           {
@@ -40,19 +42,15 @@ const InputForm = () => {
         ],
         update_existing: false,
       },
-      {
-        auth: {
-          username: "odus",
-          password: "d0569c2aa538ae67789e099b8a2d38b7-us5",
-        },
-      }
+    
     );
     if (response.status === 200){
       setSubmitted("You have signed up successfully!")
-      setAddNew(" Add a new subscription")
+      
+      setFormData(initialFormData)
     } else {
       setSubmitted("There is an error, please try again!")
-      setAddNew("Try again")
+      
 
 
     }
@@ -93,14 +91,7 @@ const InputForm = () => {
           Sign up!
         </button>
        <h4 className="text-2xl font-bold text-yellow-600"> {submitted}</h4>
-       <h6
-              onClick={() => {
-                window.location.reload(false);
-              }}
-              className="cursor-pointer text-base my-6 text-primary text-gray-600 font-semibold hover:text-gray-800"
-            >
-             {addNew}
-            </h6>
+    
       </form>
       {/* <div className="grid grid-cols-3 gap-4">
         {items.map((info, index) => (
